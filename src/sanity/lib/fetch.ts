@@ -1,5 +1,5 @@
-import type { QueryParams } from "@sanity/client";
-import { client } from "./client";
+import type { QueryParams } from '@sanity/client';
+import { client } from './client';
 
 export async function sanityFetch<QueryResponse>({
   query,
@@ -14,7 +14,7 @@ export async function sanityFetch<QueryResponse>({
   const normalizedParams: QueryParams = {};
   for (const key in params) {
     const value = params[key];
-    if (value === "all" || value === "") {
+    if (value === 'all' || value === '') {
       normalizedParams[key] = null;
     } else {
       normalizedParams[key] = value;

@@ -6,7 +6,7 @@
 :root {
   --background: oklch(0.1776 0 0);
   --foreground: oklch(100% 0.00011 271.152);
-  
+
   --hero-overlay: oklch(21.438% 0.02156 284.43);
   --sidebar-accent: oklch(0.2739 0.0055 286.0326);
 
@@ -68,7 +68,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  
+
   --color-hero-overlay: var(--hero-overlay);
   --color-sidebar-accent: var(--sidebar-accent);
 
