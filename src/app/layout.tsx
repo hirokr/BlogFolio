@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Poppins, Courier_Prime, Cutive_Mono } from 'next/font/google';
 import './globals.css';
+import ScrollProgress from '@/components/ui/ScrollProgress';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${courierPrime.variable} ${cutiveMono.variable} antialiased`}
       >
+        <ScrollProgress />
         {children}
       </body>
     </html>
