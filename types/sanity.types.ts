@@ -13,6 +13,37 @@
  */
 
 // Source: schema.json
+export type Photo = {
+  _id: string;
+  _type: 'photo';
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    caption?: string;
+    credit?: string;
+    _type: 'image';
+  };
+  altText?: string;
+  category?: {
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: 'category';
+  };
+  tags?: Array<string>;
+};
+
 export type Post = {
   _id: string;
   _type: 'post';
@@ -34,13 +65,6 @@ export type Post = {
     alt?: string;
     _type: 'image';
   };
-  categories?: Array<{
-    _ref: string;
-    _type: 'reference';
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: 'category';
-  }>;
   publishedAt?: string;
   highlight?: boolean;
   body?: Array<
@@ -244,6 +268,7 @@ export type SanityAssetSourceData = {
 };
 
 export type AllSanitySchemaTypes =
+  | Photo
   | Post
   | Category
   | BlockContent
@@ -274,29 +299,7 @@ export type HighlightedPostsQueryResult = Array<{
     alt: string | null;
   } | null;
   publishedAt: string | null;
-  categories: Array<{
-    _id: string;
-    title: string | null;
-  }> | null;
-}>;
-// Variable: allHomeQuery
-// Query: *[_type == "post"] | order(publishedAt desc) {  _id,  title,  slug,  mainImage {    asset-> {      _id,      url    },    alt  },  publishedAt,  categories[]-> {    _id,    title  }}
-export type AllHomeQueryResult = Array<{
-  _id: string;
-  title: string | null;
-  slug: Slug | null;
-  mainImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-    } | null;
-    alt: string | null;
-  } | null;
-  publishedAt: string | null;
-  categories: Array<{
-    _id: string;
-    title: string | null;
-  }> | null;
+  categories: null;
 }>;
 // Variable: allPostsQuery
 // Query: *[_type == "post"] | order(publishedAt desc) {  _id,  title,  slug,  mainImage {    asset-> {      _id,      url    },    alt  },  publishedAt,  categories[]-> {    _id,    title  },  body}
@@ -312,10 +315,7 @@ export type AllPostsQueryResult = Array<{
     alt: string | null;
   } | null;
   publishedAt: string | null;
-  categories: Array<{
-    _id: string;
-    title: string | null;
-  }> | null;
+  categories: null;
   body: Array<
     | {
         children?: Array<{
@@ -365,10 +365,7 @@ export type PaginatedPostsQueryResult = Array<{
     alt: string | null;
   } | null;
   publishedAt: string | null;
-  categories: Array<{
-    _id: string;
-    title: string | null;
-  }> | null;
+  categories: null;
   body: Array<
     | {
         children?: Array<{
@@ -455,21 +452,57 @@ export type PostQueryResult = {
     alt: string | null;
   } | null;
   publishedAt: string | null;
-  categories: Array<{
+  categories: null;
+} | null;
+// Variable: categoriesQuery
+// Query: *[_type == "category"] | order(title asc) {  _id,  title,  slug}
+export type CategoriesQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+}>;
+// Variable: photosByCategoryQuery
+// Query: *[_type == "photo" && category->slug.current == $slug] | order(_createdAt desc) {  _id,  title,  image {    asset-> {      _id,      url    },    caption,    credit  },  altText,  category-> {    _id,    title,    slug  },  tags}
+export type PhotosByCategoryQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  image: {
+    asset: {
+      _id: string;
+      url: string | null;
+    } | null;
+    caption: string | null;
+    credit: string | null;
+  } | null;
+  altText: string | null;
+  category: {
     _id: string;
     title: string | null;
-  }> | null;
-} | null;
+    slug: Slug | null;
+  } | null;
+  tags: Array<string> | null;
+}>;
+// Variable: photoCategoriesQuery
+// Query: *[_type == "category"] | order(title asc) {  _id,  title,  slug,  description,  "photoCount": count(*[_type == "photo" && category->_id == ^._id])}
+export type PhotoCategoriesQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  photoCount: number;
+}>;
 
 // Query TypeMap
 import '@sanity/client';
 declare module '@sanity/client' {
   interface SanityQueries {
     '*[_type == "post" && highlight == true] | order(publishedAt desc) {\n  _id,\n  title,\n  slug,\n  mainImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  publishedAt,\n  categories[]-> {\n    _id,\n    title\n  }\n}': HighlightedPostsQueryResult;
-    '*[_type == "post"] | order(publishedAt desc) {\n  _id,\n  title,\n  slug,\n  mainImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  publishedAt,\n  categories[]-> {\n    _id,\n    title\n  }\n}': AllHomeQueryResult;
     '*[_type == "post"] | order(publishedAt desc) {\n  _id,\n  title,\n  slug,\n  mainImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  publishedAt,\n  categories[]-> {\n    _id,\n    title\n  },\n  body\n}': AllPostsQueryResult;
     '*[_type == "post"] | order(publishedAt desc) [$start...$end] {\n  _id,\n  title,\n  slug,\n  mainImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  publishedAt,\n  categories[]-> {\n    _id,\n    title\n  },\n  body\n}': PaginatedPostsQueryResult;
     'count(*[_type == "post"])': PostsCountQueryResult;
     '*[_type == "post" && slug.current == $slug][0]{\n  _id,\n  title,\n  slug,\n  body,\n  mainImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  publishedAt,\n  categories[]-> {\n    _id,\n    title\n  }\n}': PostQueryResult;
+    '*[_type == "category"] | order(title asc) {\n  _id,\n  title,\n  slug\n}': CategoriesQueryResult;
+    '*[_type == "photo" && category->slug.current == $slug] | order(_createdAt desc) {\n  _id,\n  title,\n  image {\n    asset-> {\n      _id,\n      url\n    },\n    caption,\n    credit\n  },\n  altText,\n  category-> {\n    _id,\n    title,\n    slug\n  },\n  tags\n}': PhotosByCategoryQueryResult;
+    '*[_type == "category"] | order(title asc) {\n  _id,\n  title,\n  slug,\n  description,\n  "photoCount": count(*[_type == "photo" && category->_id == ^._id])\n}': PhotoCategoriesQueryResult;
   }
 }

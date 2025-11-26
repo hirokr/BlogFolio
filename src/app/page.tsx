@@ -2,6 +2,7 @@ import AboutMe from '@/components/AboutMe';
 import Contact from '@/components/Contact';
 import Experience from '@/components/Experience';
 import Hero from '@/components/Hero';
+import Images from '@/components/Images';
 import SkillSet from '@/components/Skillset';
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
       <Experience />
       <AboutMe />
       <SkillSet />
+      <Images />
       <Contact />
     </main>
   );
