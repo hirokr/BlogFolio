@@ -61,8 +61,8 @@ export default function Hero() {
 
       {/* Text */}
       <div
-        ref={textRef}
         className="bg-sidebar space-y-4 p-10 lg:-ml-40 lg:bg-transparent"
+        ref={textRef}
       >
         <h1 className="font-serif text-4xl font-bold capitalize lg:text-6xl">
           I'm Robin Will. A Product Designer <br />

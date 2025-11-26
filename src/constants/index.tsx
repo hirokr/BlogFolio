@@ -7,6 +7,12 @@ export type SocialLink = {
   icon: IconType;
 };
 
+export type ExperienceDataProps = {
+  company: string;
+  position: string;
+  description: string;
+};
+
 export const socialLinks: SocialLink[] = [
   { name: 'GitHub', url: '#', icon: Github },
   { name: 'LinkedIn', url: '#', icon: Linkedin },
@@ -17,4 +23,25 @@ export const pages: { name: string; url: string }[] = [
   { name: 'About', url: '#' },
   { name: 'Projects', url: '#' },
   { name: 'Contact', url: '#' },
+];
+
+export const experienceData: ExperienceDataProps[] = [
+  {
+    company: 'Google',
+    position: 'Interaction Designer',
+    description:
+      'I currently am the lead designer on the interaction design team for Google Play.',
+  },
+  {
+    company: 'Google',
+    position: 'Interaction Designer',
+    description:
+      'I currently am the lead designer on the interaction design team for Google Play.',
+  },
+  {
+    company: 'Google',
+    position: 'Interaction Designer',
+    description:
+      'I currently am the lead designer on the interaction design team for Google Play.',
+  },
 ];
