@@ -1,4 +1,4 @@
-import { Github, Linkedin } from 'lucide-react';
+import { BrickWallShield, Github, Linkedin } from 'lucide-react';
 import { IconType } from '../../types/lucide.types';
 
 export type SocialLink = {
@@ -10,6 +10,12 @@ export type SocialLink = {
 export type ExperienceDataProps = {
   company: string;
   position: string;
+  description: string;
+};
+
+export type skillSetProps = {
+  icon: IconType;
+  skill: string;
   description: string;
 };
 
@@ -45,3 +51,31 @@ export const experienceData: ExperienceDataProps[] = [
       'I currently am the lead designer on the interaction design team for Google Play.',
   },
 ];
+
+export const skillSetData: skillSetProps[] = [
+  {
+    icon: BrickWallShield,
+    skill: 'UI/UX Design',
+    description:
+      'Crafting intuitive and engaging user experiences through thoughtful design principles.',
+  },
+  {
+    icon: BrickWallShield,
+    skill: 'UI/UX Design',
+    description:
+      'Crafting intuitive and engaging user experiences through thoughtful design principles.',
+  },
+  {
+    icon: BrickWallShield,
+    skill: 'UI/UX Design',
+    description:
+      'Crafting intuitive and engaging user experiences through thoughtful design principles.',
+  },
+  {
+    icon: BrickWallShield,
+    skill: 'UI/UX Design',
+    description:
+      'Crafting intuitive and engaging user experiences through thoughtful design principles.',
+  },
+];
+  
