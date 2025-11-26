@@ -117,3 +117,24 @@ export const photoCategoriesQuery = groq`*[_type == "category"] | order(title as
   description,
   "photoCount": count(*[_type == "photo" && category->_id == ^._id])
 }`;
+
+// Query to get all photos
+export const allPhotosQuery = groq`*[_type == "photo"] | order(_createdAt desc) {
+  _id,
+  title,
+  image {
+    asset-> {
+      _id,
+      url
+    },
+    caption,
+    credit
+  },
+  altText,
+  category-> {
+    _id,
+    title,
+    slug
+  },
+  tags
+}`;

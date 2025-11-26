@@ -81,12 +81,12 @@ const Contact = () => {
 
   return (
     <section className="container mx-auto mt-10 flex max-w-[70%] flex-col items-center justify-center">
-      <div className="grid grid-cols-1 gap-16 py-16 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-16 py-16 lg:grid-cols-2">
         <div className="mb-8">
-          <h2 className="mb-6 text-4xl font-bold md:text-5xl">
+          <h2 className="mb-6 text-4xl font-bold lg:text-5xl">
             Let's talk business
           </h2>
-          <p className="text-foreground/60 md:text-xl">
+          <p className="text-foreground/60 lg:text-xl">
             Now that you know a lot about me, let me know if you want to work
             with me.
           </p>
