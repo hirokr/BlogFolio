@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
 import type {
@@ -10,6 +10,7 @@ import type {
 import { client } from '@/sanity/lib/client';
 import { photosByCategoryQuery, allPhotosQuery } from '@/sanity/lib/queries';
 import LoadingSpinner from './LoadingSpinner';
+import { Button } from './ui/button';
 
 interface PhotoGridWithCategoriesProps {
   categories: PhotoCategoriesQueryResult;
@@ -40,6 +41,11 @@ const PhotoGridWithCategories = ({
       setIsLoading(false);
     }
   };
+
+  // Fetch all photos on component mount
+  useEffect(() => {
+    fetchPhotos(null);
+  }, []);
 
   const handleCategoryClick = (categorySlug: string | null) => {
     setSelectedCategory(categorySlug);
@@ -72,28 +78,28 @@ const PhotoGridWithCategories = ({
     <div className="space-y-8">
       {/* Category Filter */}
       <div className="flex flex-wrap gap-3">
-        <button
+        <Button
+          size={'lg'}
           onClick={() => handleCategoryClick(null)}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-            selectedCategory === null
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+          className={`px-4 py-2 text-sm font-medium transition-colors ${
+            selectedCategory === null ? 'bg-blue-700' : 'hover:bg-blue-700'
           }`}
         >
           All Photos
-        </button>
+        </Button>
         {categories.map(category => (
-          <button
+          <Button
             key={category._id}
             onClick={() => handleCategoryClick(category.slug?.current || null)}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
               selectedCategory === category.slug?.current
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                ? 'bg-blue-700'
+                : 'hover:bg-blue-700'
             }`}
+            size={'lg'}
           >
             {category.title} ({category.photoCount})
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -113,7 +119,7 @@ const PhotoGridWithCategories = ({
         photos.length === 0 &&
         selectedCategory !== null && (
           <div className="text-muted-foreground py-12 text-center">
-            <p>Click a category to view photos</p>
+            <p>No Photos for this category.</p>
           </div>
         )}
 
