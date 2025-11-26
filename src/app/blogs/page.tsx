@@ -1,5 +1,7 @@
 import React from 'react';
 
-export default function page() {
-  return <main></main>;
-}
+const Blogs = async () => {
+  return <main className="min-h-screen"></main>;
+};
+
+export default Blogs;

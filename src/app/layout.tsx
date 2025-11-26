@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Poppins, Courier_Prime, Cutive_Mono } from 'next/font/google';
 import './globals.css';
 import ScrollProgress from '@/components/ui/ScrollProgress';
+import Footer from '@/components/Footer';
+import { Toaster } from '@/components/ui/sonner';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -37,12 +39,15 @@ export default function RootLayout({
       suppressHydrationWarning={true}
       suppressContentEditableWarning={true}
       spellCheck={true}
+      className='dark'
     >
       <body
         className={`${poppins.variable} ${courierPrime.variable} ${cutiveMono.variable} antialiased`}
       >
         <ScrollProgress />
         {children}
+        <Toaster />
+        <Footer/>
       </body>
     </html>
   );

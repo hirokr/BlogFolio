@@ -14,7 +14,7 @@
   --foreground-secondary: oklch(0.9245 0.0533 67.0855);
   --sidebar: oklch(0.2103 0.0059 285.8852);
 
-  --radius: 0.5rem;
+  --radius: 0.2rem;
 
   --shadow-x: 0;
   --shadow-y: 1px;
@@ -142,6 +142,10 @@ body {
   @apply rounded-full delay-75 duration-200 ease-in-out;
 }
 
+@utility underline-animation-lr {
+  @apply before:bg-foreground relative before:absolute before:bottom-0 before:left-0 before:h-[1px] before:w-0 before:transition-all before:duration-300 hover:before:w-full;
+}
+
 @layer components {
   main {
     @apply w-full overflow-x-hidden;
@@ -149,4 +153,26 @@ body {
 }
 ::-webkit-scrollbar {
   display: none;
+}
+
+@layer base {
+  .btn {
+    position: relative;
+    display: inline-block;
+    padding: 14px 24px;
+    background: #222;
+    color: white;
+    overflow: hidden;
+  }
+
+  #lineToBg {
+    position: absolute;
+    left: 50%; /* center origin */
+    top: 10%; /* 10% height as you said */
+    height: 2px;
+    width: 0;
+    background: white;
+    transform: translateX(-50%); /* perfectly center it */
+    pointer-events: none;
+  }
 }
