@@ -38,8 +38,8 @@ export const allPostsQuery = groq`*[_type == "post"] | order(publishedAt desc) {
   body
 }`;
 
-// Query to get paginated blog posts
-export const paginatedPostsQuery = groq`*[_type == "post"] | order(publishedAt desc) [$start...$end] {
+// Query to get paginated blog posts with highlighted first
+export const paginatedPostsQuery = groq`*[_type == "post"] | order(highlight desc, publishedAt desc) [$start...$end] {
   _id,
   title,
   slug,
@@ -51,6 +51,7 @@ export const paginatedPostsQuery = groq`*[_type == "post"] | order(publishedAt d
     alt
   },
   publishedAt,
+  highlight,
   categories[]-> {
     _id,
     title
@@ -60,6 +61,27 @@ export const paginatedPostsQuery = groq`*[_type == "post"] | order(publishedAt d
 
 // Query to get total count of blog posts
 export const postsCountQuery = groq`count(*[_type == "post"])`;
+
+// Query to get blog excerpt (first 120 characters of body text)
+export const paginatedPostsWithExcerptQuery = groq`*[_type == "post"] | order(highlight desc, publishedAt desc) [$start...$end] {
+  _id,
+  title,
+  slug,
+  mainImage {
+    asset-> {
+      _id,
+      url
+    },
+    alt
+  },
+  publishedAt,
+  highlight,
+  categories[]-> {
+    _id,
+    title
+  },
+  "excerpt": array::join(string::split((pt::text(body)), "")[0..120], "")
+}`;
 
 // Query to get a single blog post by slug
 export const postQuery = groq`*[_type == "post" && slug.current == $slug][0]{
