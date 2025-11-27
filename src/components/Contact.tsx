@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -19,6 +19,7 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
+import { sendContactEmail } from '@/server/sendMail';
 
 gsap.registerPlugin(useGSAP);
 
@@ -34,6 +35,7 @@ const Contact = () => {
   // Refs **MUST** be used
   const btnRef = useRef<HTMLButtonElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -75,8 +77,31 @@ const Contact = () => {
   }, []);
 
   const onSubmit = async (data: ContactFormValues) => {
-    console.log(data);
-    toast.message('Thank you for reaching out. I will get back to you soon.');
+    setIsSubmitting(true);
+
+    try {
+      const result = await sendContactEmail(data);
+
+      if (result.success) {
+        toast.success('Message sent successfully!', {
+          description:
+            'Thank you for reaching out. I will get back to you soon.',
+        });
+        form.reset();
+      } else {
+        toast.error('Failed to send message', {
+          description:
+            result.message || 'Please try again later or contact me directly.',
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('Something went wrong', {
+        description: 'Please try again later or contact me directly.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -152,10 +177,11 @@ const Contact = () => {
                 size="lg"
                 id="btnHover"
                 ref={btnRef}
-                className="btn relative h-12 w-full overflow-hidden border-2 border-blue-500"
+                disabled={isSubmitting}
+                className="btn relative h-12 w-full overflow-hidden border-2 border-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <div className="z-10 bg-transparent font-semibold uppercase">
-                  Let's Get Started
+                  {isSubmitting ? 'Sending...' : "Let's Get Started"}
                 </div>
                 <div
                   ref={lineRef}
